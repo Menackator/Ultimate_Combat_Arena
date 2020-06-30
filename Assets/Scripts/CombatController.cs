@@ -8,11 +8,17 @@ public class CombatController : MonoBehaviour
     public GameObject TK; // Tatakai => 1
     public GameObject RL; // Rama Lux => 2
     public GameObject AV; // Ansell V'Han => 3
+    private GameObject SH_Cam;
+    private GameObject TK_Cam;
+    private GameObject RL_Cam;
+    private GameObject AV_Cam;
     public string targetName = "";
     public string playerName = "";
-    public int numOfPlayers = 1; // Always at least one
+    public int numOfPlayers = 2; // Always at least one
     public int[] playerOrder = new int[4]; // Used to denote which player is playing which character
     public bool[] charUsed = new bool[4]; // Denotes which characters are being used: 0 = SH, 1 = TK, 2 = RL, 3 = AV
+    public GameObject[] playerObjOrder = new GameObject[4]; // Used to store gameobject references
+    public GameObject[] playerCamOrder = new GameObject[4]; // Used to store gameobject references
 
     // Start is called before the first frame update
     void Awake()
@@ -27,7 +33,13 @@ public class CombatController : MonoBehaviour
         TK = GameObject.Find("Tatakai");
         RL = GameObject.Find("Rama Lux");
         AV = GameObject.Find("Ansell V'Han");
-        GameObject[] playerObjOrder = new GameObject[numOfPlayers]; // Used to store gameobject references
+
+
+        // Finds each player camera
+        SH_Cam = GameObject.Find("Senka Hekt/Camera");
+        TK_Cam = GameObject.Find("Tatakai/Camera");
+        RL_Cam = GameObject.Find("Rama Lux/Camera");
+        AV_Cam = GameObject.Find("Ansell V'Han/Camera");
 
         // Organizes the characters per player order
         for (int i = 0; i < numOfPlayers; i++)
@@ -35,20 +47,24 @@ public class CombatController : MonoBehaviour
 
             switch (playerOrder[i])
             {
-                case 0:
+                case 0: // Senka Hekt
                     playerObjOrder[i] = SH;
+                    playerCamOrder[i] = SH_Cam;
                     charUsed[0] = true;
                     break;
-                case 1:
+                case 1: // Tatakai
                     playerObjOrder[i] = TK;
+                    playerCamOrder[i] = TK_Cam;
                     charUsed[1] = true;
                     break;
-                case 2:
+                case 2: // Rama Lux
                     playerObjOrder[i] = RL;
+                    playerCamOrder[i] = RL_Cam;
                     charUsed[2] = true;
                     break;
-                case 3:
+                case 3: // Ansell V'Han
                     playerObjOrder[i] = AV;
+                    playerCamOrder[i] = AV_Cam;
                     charUsed[3] = true;
                     break;
             }
@@ -60,7 +76,7 @@ public class CombatController : MonoBehaviour
         {
             if (charUsed[i] == false)
             {
-                switch(i)
+                switch (i)
                 {
                     case 0:
                         SH.SetActive(false);
@@ -74,20 +90,69 @@ public class CombatController : MonoBehaviour
                     case 3:
                         AV.SetActive(false);
                         break;
-                }  
+                }
             }
         }
+    }
 
-        // Sets which player is going first based on settings chosen
+    // Start method after each object initializes themselves
+    void Start()
+    {
+        // Sets which player is going first based on settings chosen <-- Currently only works for two players
         // PLACEHOLDER
-        targetName = TK.name;
-        playerName = SH.name;
+        playerCamOrder[0].SetActive(true);
+        playerCamOrder[1].SetActive(false);
+        targetName = playerObjOrder[1].name;
+        playerName = playerObjOrder[0].name;
+    }
+    
+
+    // Method changes who is currently playing
+    public void SwitchPlayer()
+    {
+        if (playerCamOrder[0].activeSelf == true)
+        {
+            playerCamOrder[0].SetActive(false);
+            playerCamOrder[1].SetActive(true);
+            targetName = playerObjOrder[0].name;
+            playerName = playerObjOrder[1].name;
+            AllowPlayerAction(playerName);
+        }
+        else
+        {
+            playerCamOrder[0].SetActive(true);
+            playerCamOrder[1].SetActive(false);
+            targetName = playerObjOrder[1].name;
+            playerName = playerObjOrder[0].name;
+            AllowPlayerAction(playerName);
+        }
+        
+    }
+
+    // Method for allowing the current player to perform an action
+    public void AllowPlayerAction(string playerName)
+    {
+        switch (playerName)
+        {
+            case "Senka Hekt":
+                SH.GetComponent<SH_Control>().cardPlayed = false;
+                break;
+            case "Tatakai":
+                TK.GetComponent<TK_Control>().cardPlayed = false;
+                break;
+            case "Rama Lux":
+                RL.GetComponent<RL_Control>().cardPlayed = false;
+                break;
+            case "Ansell V'Han":
+                AV.GetComponent<AV_Control>().cardPlayed = false;
+                break;
+        }
     }
 
     // Method changes who is currently playing
-    public void switchTurn()
+    public void updateEndOfTurnEffects()
     {
-        
+
     }
 
     // Update is called once per frame

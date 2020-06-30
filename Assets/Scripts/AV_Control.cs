@@ -12,6 +12,7 @@ public class AV_Control : MonoBehaviour
     public string opponentName;
     public int opponentHealth;
     public Camera SH_Camera;
+    public bool cardPlayed = false;
 
     // Start is called before the first frame update
     void Start()
