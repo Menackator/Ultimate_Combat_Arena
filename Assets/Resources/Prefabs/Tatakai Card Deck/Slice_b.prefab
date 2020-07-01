@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 1563372597427514569}
   - component: {fileID: 2932490730980521951}
   - component: {fileID: 8647218696628812617}
-  - component: {fileID: 2999912602457295855}
+  - component: {fileID: 870415581671074796}
   m_Layer: 0
   m_Name: Slice_b
   m_TagString: Card
@@ -314,7 +314,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2999912602457295855
+--- !u!114 &870415581671074796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -18,6 +18,8 @@ public class CombatController : MonoBehaviour
     public int playerNum = 0;
     public int numOfPlayers = 2; // Always at least one
     public int[] playerOrder = new int[4]; // Used to denote which player is playing which character
+    public int[] EndOfTurn_HealthEffect = new int[4];
+    public int EndOfTurn_MiscEffect;
     public bool[] charUsed = new bool[4]; // Denotes which characters are being used: 0 = SH, 1 = TK, 2 = RL, 3 = AV
     public GameObject[] playerObjOrder = new GameObject[4]; // Used to store gameobject references
     public GameObject[] playerCamOrder = new GameObject[4]; // Used to store gameobject references
@@ -137,8 +139,25 @@ public class CombatController : MonoBehaviour
         
     }
 
-    // Method changes who is currently playing
-    public void updateEndOfTurnEffects()
+    // Method updates the possible effects at the end of the turn
+    public void UpdateEndOfTurnEffects(int targetEffect, int playerEffect, int miscEffect)
+    {
+        for (int i = 0; i < numOfPlayers; i++)
+        {
+            if (targetName == playerObjOrder[i].name)
+            {
+                EndOfTurn_HealthEffect[i] += targetEffect;
+            }
+            if (playerName == playerObjOrder[i].name)
+            {
+                EndOfTurn_HealthEffect[i] += playerEffect;
+            }
+            EndOfTurn_MiscEffect += miscEffect;
+        }
+    }
+
+    // Method ends the turn (round) and starts the next one
+    public void EndTurnAndStartNewOne()
     {
 
     }

@@ -5,12 +5,11 @@ using UnityEngine;
 public class TK_Cards : MonoBehaviour
 {
     public GameObject Bargain_b;
-    public GameObject Block_b;
     public GameObject BuyTime_b;
     public GameObject CutAndRun_b;
     public GameObject DefensiveStrike_b;
     public GameObject GunpowderBomb_b;
-    public GameObject Kick_b;
+    public GameObject TK_Kick_b;
     public GameObject PoisonDart_b;
     public GameObject Slice_b;
     public GameObject Stab_b;
@@ -40,7 +39,7 @@ public class TK_Cards : MonoBehaviour
     {
         Bargain_b = Resources.Load("Prefabs/Tatakai Card Deck/Bargain_b") as GameObject;
         BuyTime_b = Resources.Load("Prefabs/Tatakai Card Deck/BuyTime_b") as GameObject;
-        Kick_b = Resources.Load("Prefabs/Tatakai Card Deck/Kick_b") as GameObject;
+        TK_Kick_b = Resources.Load("Prefabs/Tatakai Card Deck/TK_Kick_b") as GameObject;
         Slice_b = Resources.Load("Prefabs/Tatakai Card Deck/Slice_b") as GameObject;
         Stab_b = Resources.Load("Prefabs/Tatakai Card Deck/Stab_b") as GameObject;
     }

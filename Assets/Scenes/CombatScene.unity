@@ -711,6 +711,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8507361095323104655, guid: 3b4950f35941e8045b33a4c1a55af2db,
+        type: 3}
+      propertyPath: m_Name
+      value: EndOfTurn
+      objectReference: {fileID: 0}
     - target: {fileID: 8980426532788282857, guid: 3b4950f35941e8045b33a4c1a55af2db,
         type: 3}
       propertyPath: m_Name
