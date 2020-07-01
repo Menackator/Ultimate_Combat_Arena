@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEditor.UI;
 using UnityEngine;
 
-public class Scratch_b: MonoBehaviour
+public class Stab_b : MonoBehaviour
 {
     // Calls upon the card action when clicked on
     public void DoAction() 
     {
-        int targetNum = GameObject.Find("CombatController").GetComponent<CombatController>().targetNum;
         int damageToTarget = 1;
+        int targetNum = GameObject.Find("CombatController").GetComponent<CombatController>().targetNum;
 
+        // Takes away health
         GameObject.Find("CombatController").GetComponent<CombatController>().playerObjOrder[targetNum].GetComponent<CharacterInfo>().health -= damageToTarget;
 
         Destroy(gameObject);

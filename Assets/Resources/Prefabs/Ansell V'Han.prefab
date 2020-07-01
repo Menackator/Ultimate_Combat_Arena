@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 245940064430970124}
   - component: {fileID: 1205121849275855595}
   - component: {fileID: 5423023605124071822}
+  - component: {fileID: 8431544221032265083}
   m_Layer: 0
   m_Name: Ansell V'Han
   m_TagString: P4
@@ -115,6 +116,21 @@ MonoBehaviour:
   opponentName: 
   opponentHealth: 0
   SH_Camera: {fileID: 0}
+  cardPlayed: 0
+--- !u!114 &8431544221032265083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2476919627737460936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081024c8bd4264847b2abe2f514b00fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPlayed: 0
+  health: 0
 --- !u!1 &8315544890987569827
 GameObject:
   m_ObjectHideFlags: 0

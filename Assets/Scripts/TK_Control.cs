@@ -19,10 +19,8 @@ public class TK_Control : MonoBehaviour
     private GameObject Card4;
     private GameObject Card5;
     public Camera Camera;
-    public int health = 10;
     public string opponentName;
     public int opponentHealth;
-    public bool cardPlayed = false;
 
 
     // Start is called before the first frame update
@@ -30,12 +28,10 @@ public class TK_Control : MonoBehaviour
     {
         // UI Elements
         Name_Text = GameObject.Find("Tatakai/Camera/P_UI/Character Name").GetComponent<Text>();
-        Name_Text.color = new Color32(0, 164, 17, 255);
+        Name_Text.color = new Color32(0, 0, 0, 255);
         Name_Text.text = "Tatakai";
         LP_Text = GameObject.Find("Tatakai/Camera/P_UI/LP").GetComponent<Text>();
-        LP_Text.text = "Life Points: " + health.ToString();
         OpponentLP_Text = GameObject.Find("Tatakai/Camera/P_UI/Opponent_LP").GetComponent<Text>();
-        OpponentLP_Text.text = opponentName + "'s Life Points: " + opponentHealth.ToString();
         Camera = GameObject.Find("Tatakai/Camera").GetComponent<Camera>();
         DeckButton = GameObject.Find("Tatakai/Camera/P_UI/Deck");
         ActionButton = GameObject.Find("Tatakai/Camera/P_UI/Action");
@@ -119,7 +115,7 @@ public class TK_Control : MonoBehaviour
     // Time delay coroutine
     IEnumerator WaitFunction(float time)
     {
-        cardPlayed = true;
+        GetComponent<CharacterInfo>().cardPlayed = true;
         yield return new WaitForSeconds(time);
         Controller.GetComponent<CombatController>().SwitchPlayer();
     }
@@ -127,6 +123,13 @@ public class TK_Control : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        opponentName = GameObject.Find("CombatController").GetComponent<CombatController>().targetName;
+        int targetNum = GameObject.Find("CombatController").GetComponent<CombatController>().targetNum;
+        opponentHealth = GameObject.Find("CombatController").GetComponent<CombatController>().playerObjOrder[targetNum].GetComponent<CharacterInfo>().health;
+        Debug.Log(targetNum);
+        OpponentLP_Text.text = opponentName + "'s Life Points: " + opponentHealth.ToString() + opponentHealth.ToString();
+        LP_Text.text = "Life Points: " + GetComponent<CharacterInfo>().health.ToString();
+
         // Checks if player clicks a card uses a raycast
         var ray = Camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -134,7 +137,7 @@ public class TK_Control : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
 
-            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Card") && cardPlayed == false)
+            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Card") && GetComponent<CharacterInfo>().cardPlayed == false)
             {
                 hit.collider.gameObject.SendMessage("DoAction");
                 StartCoroutine(WaitFunction(1.0f));

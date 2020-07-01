@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 695583487644752188}
   - component: {fileID: 5894360147075544956}
   - component: {fileID: 9018045557496259407}
+  - component: {fileID: 686065844837197560}
   m_Layer: 0
   m_Name: Senka Hekt
   m_TagString: P1
@@ -202,6 +203,21 @@ MonoBehaviour:
   health: 10
   opponentName: 
   opponentHealth: 0
+  cardPlayed: 0
+--- !u!114 &686065844837197560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980426532788282857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081024c8bd4264847b2abe2f514b00fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPlayed: 0
+  health: 0
 --- !u!1001 &4840614185835801582
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -14,6 +14,8 @@ public class CombatController : MonoBehaviour
     private GameObject AV_Cam;
     public string targetName = "";
     public string playerName = "";
+    public int targetNum = 0;
+    public int playerNum = 0;
     public int numOfPlayers = 2; // Always at least one
     public int[] playerOrder = new int[4]; // Used to denote which player is playing which character
     public bool[] charUsed = new bool[4]; // Denotes which characters are being used: 0 = SH, 1 = TK, 2 = RL, 3 = AV
@@ -104,6 +106,8 @@ public class CombatController : MonoBehaviour
         playerCamOrder[1].SetActive(false);
         targetName = playerObjOrder[1].name;
         playerName = playerObjOrder[0].name;
+        playerNum = 0;
+        targetNum = 1;
     }
     
 
@@ -116,7 +120,9 @@ public class CombatController : MonoBehaviour
             playerCamOrder[1].SetActive(true);
             targetName = playerObjOrder[0].name;
             playerName = playerObjOrder[1].name;
-            AllowPlayerAction(playerName);
+            targetNum = 0;
+            playerNum = 1;
+            playerObjOrder[1].GetComponent<CharacterInfo>().cardPlayed = false;
         }
         else
         {
@@ -124,29 +130,11 @@ public class CombatController : MonoBehaviour
             playerCamOrder[1].SetActive(false);
             targetName = playerObjOrder[1].name;
             playerName = playerObjOrder[0].name;
-            AllowPlayerAction(playerName);
+            targetNum = 1;
+            playerNum = 0;
+            playerObjOrder[0].GetComponent<CharacterInfo>().cardPlayed = false;
         }
         
-    }
-
-    // Method for allowing the current player to perform an action
-    public void AllowPlayerAction(string playerName)
-    {
-        switch (playerName)
-        {
-            case "Senka Hekt":
-                SH.GetComponent<SH_Control>().cardPlayed = false;
-                break;
-            case "Tatakai":
-                TK.GetComponent<TK_Control>().cardPlayed = false;
-                break;
-            case "Rama Lux":
-                RL.GetComponent<RL_Control>().cardPlayed = false;
-                break;
-            case "Ansell V'Han":
-                AV.GetComponent<AV_Control>().cardPlayed = false;
-                break;
-        }
     }
 
     // Method changes who is currently playing

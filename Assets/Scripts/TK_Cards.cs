@@ -38,11 +38,11 @@ public class TK_Cards : MonoBehaviour
     // Awake is called before start functions
     void Awake()
     {
-        Bargain_b = Resources.Load("Prefabs/Senka Hekt Card Deck/BarbedWhip_b") as GameObject;
-        BuyTime_b = Resources.Load("Prefabs/Senka Hekt Card Deck/BloodMagic_b") as GameObject;
-        Kick_b = Resources.Load("Prefabs/Senka Hekt Card Deck/Desperation_b") as GameObject;
-        Slice_b = Resources.Load("Prefabs/Senka Hekt Card Deck/GatherDarkness_b") as GameObject;
-        Stab_b = Resources.Load("Prefabs/Senka Hekt Card Deck/Scratch_b") as GameObject;
+        Bargain_b = Resources.Load("Prefabs/Tatakai Card Deck/Bargain_b") as GameObject;
+        BuyTime_b = Resources.Load("Prefabs/Tatakai Card Deck/BuyTime_b") as GameObject;
+        Kick_b = Resources.Load("Prefabs/Tatakai Card Deck/Kick_b") as GameObject;
+        Slice_b = Resources.Load("Prefabs/Tatakai Card Deck/Slice_b") as GameObject;
+        Stab_b = Resources.Load("Prefabs/Tatakai Card Deck/Stab_b") as GameObject;
     }
 
 }

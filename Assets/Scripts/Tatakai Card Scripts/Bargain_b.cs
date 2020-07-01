@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEditor.UI;
 using UnityEngine;
 
-public class GatherDarkness_b : MonoBehaviour
+public class Bargain_b : MonoBehaviour
 {
     // Calls upon the card action when clicked on
     public void DoAction() 
     {
-
+        
 
         Destroy(gameObject);
     }
