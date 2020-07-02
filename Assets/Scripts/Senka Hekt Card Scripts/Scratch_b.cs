@@ -13,6 +13,7 @@ public class Scratch_b: MonoBehaviour
 
         GameObject.Find("CombatController").GetComponent<CombatController>().playerObjOrder[targetNum].GetComponent<CharacterInfo>().health -= damageToTarget;
 
+
         Destroy(gameObject);
     }
 }

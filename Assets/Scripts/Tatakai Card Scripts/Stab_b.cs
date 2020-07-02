@@ -10,9 +10,14 @@ public class Stab_b : MonoBehaviour
     {
         int damageToTarget = 1;
         int targetNum = GameObject.Find("CombatController").GetComponent<CombatController>().targetNum;
+        int playerNum = GameObject.Find("CombatController").GetComponent<CombatController>().playerNum;
+        Debug.Log(this.name);
 
         // Takes away health
         GameObject.Find("CombatController").GetComponent<CombatController>().playerObjOrder[targetNum].GetComponent<CharacterInfo>().health -= damageToTarget;
+
+        // Updates the player's hand
+        GameObject.Find("CombatController").GetComponent<CombatController>().playerObjOrder[playerNum].GetComponent<CharacterInfo>().UpdateHand(this.name);
 
         Destroy(gameObject);
     }

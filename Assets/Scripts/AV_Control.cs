@@ -18,6 +18,12 @@ public class AV_Control : MonoBehaviour
         
     }
 
+    // Method used to initialize the decks that the player chose for this character
+    public void InitializeDecks()
+    {
+
+    }
+
     // Update is called once per frame
     void Update()
     {

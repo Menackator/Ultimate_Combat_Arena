@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class AV_Cards : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject[] AV_CardChoices = new GameObject[30];
 
-    // Update is called once per frame
-    void Update()
+    // Awake is called before start functions
+    void Awake()
     {
-        
+        AV_CardChoices = Resources.LoadAll<GameObject>("Prefabs/Ansell V'Han Card Deck") as GameObject[];
     }
 }

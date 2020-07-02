@@ -12,19 +12,24 @@ public class TK_Control : MonoBehaviour
     public GameObject DeckButton;
     public GameObject ActionButton;
     public GameObject EndTurnButton;
-    private GameObject TK_Cards;
-    private GameObject Controller;
-    private GameObject Card1;
-    private GameObject Card2;
-    private GameObject Card3;
-    private GameObject Card4;
-    private GameObject Card5;
-    public Camera Camera;
+    private GameObject[] Cards = new GameObject[5];
     private GameObject CameraObj;
+    public Camera Camera;
+    private TK_Cards TK_Cards;
+    private CharacterInfo CharacterInfo;
+    private CombatController Controller;
     public string opponentName;
     public int opponentHealth;
     private bool cardsDrawn;
-
+    private bool handChosen;
+    public int[] deckChoices = new int[30];
+    private Vector3 cameraDirection;
+    private Vector3 cameraPosition;
+    Vector3[] cardPos = new Vector3[5];
+    private Quaternion cameraOrientation;
+    List<int> deckTemp = new List<int>();
+    List<int> currentHand = new List<int>();
+    private int count;
 
     // Start is called before the first frame update
     void Awake()
@@ -43,9 +48,25 @@ public class TK_Control : MonoBehaviour
         EndTurnButton = GameObject.Find("Tatakai/Camera/P_UI/EndTurn");
 
         // Relevant Objects
-        TK_Cards = GameObject.Find("Card Database");
-        Controller = GameObject.Find("CombatController");
+        TK_Cards = GetComponent<TK_Cards>();
+        CharacterInfo = GetComponent<CharacterInfo>();
+        Controller = GameObject.Find("CombatController").GetComponent<CombatController>();
 
+        // Camera Orientation/Position Information
+        cameraDirection = Camera.transform.forward;
+        cameraPosition = Camera.transform.position;
+        cardPos[0] = new Vector3(2, 0, 0) + cameraDirection * 2 + cameraPosition;
+        cardPos[1] = new Vector3(1, 0, 0) + cameraDirection * 2 + cameraPosition;
+        cardPos[2] = cameraDirection * 2 + cameraPosition;
+        cardPos[3] = new Vector3(-1, 0, 0) + cameraDirection * 2 + cameraPosition;
+        cardPos[4] = new Vector3(-2, 0, 0) + cameraDirection * 2 + cameraPosition;
+        cameraOrientation = Camera.transform.rotation;
+    }
+
+    // Method used to initialize the decks that the player chose for this character
+    public void InitializeDecks()
+    {
+        deckTemp = GetComponent<CharacterInfo>().deckOriginal;
     }
 
     // Allows the player to see the rest of their deck
@@ -96,26 +117,54 @@ public class TK_Control : MonoBehaviour
     // Method brings up or puts away the player's current hand of cards on screen
     public void BringUpHand(bool state)
     {
-        if (state == true)
+        if (state == true && handChosen == false)
         {
-            Vector3 cameraDirection = Camera.transform.forward;
-            Vector3 cameraPosition = Camera.transform.position;
-            Quaternion cameraOrientation = Camera.transform.rotation;
+            int randIndex;
 
-            Card1 = Instantiate(TK_Cards.GetComponent<TK_Cards>().Bargain_b, new Vector3(-2, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card2 = Instantiate(TK_Cards.GetComponent<TK_Cards>().BuyTime_b, new Vector3(-1, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card3 = Instantiate(TK_Cards.GetComponent<TK_Cards>().TK_Kick_b, cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card4 = Instantiate(TK_Cards.GetComponent<TK_Cards>().Slice_b, new Vector3(1, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card5 = Instantiate(TK_Cards.GetComponent<TK_Cards>().Stab_b, new Vector3(2, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
+            for (int i = 0; i < Cards.Length; i++)
+            {
+                if (deckTemp.Count != 0)
+                {
+                    randIndex = Random.Range(0, deckTemp.Count);
+                    Cards[i] = Instantiate(TK_Cards.TK_CardChoices[deckTemp[randIndex]], cardPos[i], cameraOrientation);
+                    GetComponent<CharacterInfo>().currentHandObj.Add(Cards[i]);
+                    GetComponent<CharacterInfo>().currentHandBool.Add(true);
+                    currentHand.Add(deckTemp[randIndex]);
+                    deckTemp.RemoveAt(randIndex);
+                    count++;
+                    Debug.Log("Random Index is " + randIndex.ToString());
+                    Debug.Log(deckTemp.Count.ToString() + " cards left");
+                    Debug.Log(count.ToString() + " cards used");
+                }
+
+            }
+
+            handChosen = true;
+            cardsDrawn = true;
+        }
+        else if (state == true && handChosen == true)
+        {
+            for (int i = 0; i < Cards.Length; i++)
+            {
+                //if (GetComponent<CharacterInfo>().currentHandBool[i] == true)
+                //{
+                    Cards[i] = Instantiate(TK_Cards.TK_CardChoices[currentHand[i]], cardPos[i], cameraOrientation);
+                //}
+            }
+
             cardsDrawn = true;
         }
         else if (state == false)
         {
-            Destroy(Card1);
-            Destroy(Card2);
-            Destroy(Card3);
-            Destroy(Card4);
-            Destroy(Card5);
+            for (int i = 0; i < Cards.Length; i++)
+            {
+                //if (GetComponent<CharacterInfo>().currentHandBool[i] == true)
+                //{
+                    Destroy(Cards[i]);
+                //}
+            }
+
+            Debug.Log("TEST");
             cardsDrawn = false;
         }
     }
@@ -123,22 +172,25 @@ public class TK_Control : MonoBehaviour
     // Time delay coroutine
     IEnumerator WaitFunction(float time, bool endTurn)
     {
-        GetComponent<CharacterInfo>().cardPlayed = true;
+        CharacterInfo.cardPlayed = true;
         yield return new WaitForSeconds(time);
+        Debug.Log(cardsDrawn);
         if (cardsDrawn == true)
         {
+            Debug.Log("MADE IT");
             BringUpHand(false);
         }
 
         ButtonReset();
 
+
         if (endTurn == false)
         {
-            Controller.GetComponent<CombatController>().SwitchPlayer();
+            Controller.SwitchPlayer();
         }
         else
         {
-            Controller.GetComponent<CombatController>().EndTurnAndStartNewOne();
+            Controller.EndTurnAndStartNewOne();
         }
     }
 
@@ -157,15 +209,15 @@ public class TK_Control : MonoBehaviour
         if (CameraObj.activeSelf == true)
         {
             // GUI Update
-            opponentName = Controller.GetComponent<CombatController>().targetName;
-            int targetNum = Controller.GetComponent<CombatController>().targetNum;
-            opponentHealth = Controller.GetComponent<CombatController>().playerObjOrder[targetNum].GetComponent<CharacterInfo>().health;
+            opponentName = Controller.targetName;
+            int targetNum = Controller.targetNum;
+            opponentHealth = Controller.playerObjOrder[targetNum].GetComponent<CharacterInfo>().health;
             OpponentLP_Text.text = opponentName + "'s Life Points: " + opponentHealth.ToString();
-            LP_Text.text = "Life Points: " + GetComponent<CharacterInfo>().health.ToString();
-            int playerNum = Controller.GetComponent<CombatController>().playerNum;
-            int playerHealthEffect = Controller.GetComponent<CombatController>().EndOfTurn_HealthEffect[playerNum];
-            int targetHealthEffect = Controller.GetComponent<CombatController>().EndOfTurn_HealthEffect[targetNum];
-            int miscHealthEffect = Controller.GetComponent<CombatController>().EndOfTurn_MiscEffect;
+            LP_Text.text = "Life Points: " + CharacterInfo.health.ToString();
+            int playerNum = Controller.playerNum;
+            int playerHealthEffect = Controller.EndOfTurn_HealthEffect[playerNum];
+            int targetHealthEffect = Controller.EndOfTurn_HealthEffect[targetNum];
+            int miscHealthEffect = Controller.EndOfTurn_MiscEffect;
             EndOfTurnEffects_Text.text = "End of Turn Effects\n" + "You: " + playerHealthEffect + "\nOpponent: " + targetHealthEffect + "\nEither: " + miscHealthEffect;
 
             // Checks if player clicks a card uses a raycast
@@ -175,9 +227,10 @@ public class TK_Control : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
 
-                if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Card") && GetComponent<CharacterInfo>().cardPlayed == false)
+                if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Card") && CharacterInfo.cardPlayed == false)
                 {
                     hit.collider.gameObject.SendMessage("DoAction");
+
                     StartCoroutine(WaitFunction(1.0f, false));
                 }
             }

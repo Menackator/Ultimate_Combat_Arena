@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 5894360147075544956}
   - component: {fileID: 9018045557496259407}
   - component: {fileID: 686065844837197560}
+  - component: {fileID: 8479030337201969041}
   m_Layer: 0
   m_Name: Senka Hekt
   m_TagString: P1
@@ -196,14 +197,13 @@ MonoBehaviour:
   Name_Text: {fileID: 0}
   LP_Text: {fileID: 0}
   OpponentLP_Text: {fileID: 0}
+  EndOfTurnEffects_Text: {fileID: 0}
   DeckButton: {fileID: 0}
   ActionButton: {fileID: 0}
   EndTurnButton: {fileID: 0}
   Camera: {fileID: 0}
-  health: 10
   opponentName: 
   opponentHealth: 0
-  cardPlayed: 0
 --- !u!114 &686065844837197560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +218,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPlayed: 0
   health: 0
+--- !u!114 &8479030337201969041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980426532788282857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c3058af75007da41ad42b93263cc904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BarbedWhip_b: {fileID: 0}
+  BloodMagic_b: {fileID: 0}
+  Desperation_b: {fileID: 0}
+  GatherDarkness_b: {fileID: 0}
+  Payback_b: {fileID: 0}
+  Regret_b: {fileID: 0}
+  Scratch_b: {fileID: 0}
+  ShadowBolt_b: {fileID: 0}
+  Shatter_b: {fileID: 0}
+  TelepathicAssault_b: {fileID: 0}
+  Curse_g: {fileID: 0}
+  DemonicStrength_g: {fileID: 0}
+  DragDown_g: {fileID: 0}
+  HarvestSouls_g: {fileID: 0}
+  Infection_g: {fileID: 0}
+  Retribution_g: {fileID: 0}
+  StealLife_g: {fileID: 0}
+  Terrorize_g: {fileID: 0}
+  Weakness_g: {fileID: 0}
+  Annihilation_y: {fileID: 0}
+  Darkness_y: {fileID: 0}
+  Masochism_y: {fileID: 0}
+  MindControl_y: {fileID: 0}
+  MistForm_y: {fileID: 0}
+  Vengeance_y: {fileID: 0}
+  Amnesia_p: {fileID: 0}
+  BecomeUndead_p: {fileID: 0}
+  Despair_p: {fileID: 0}
+  RaiseHell_p: {fileID: 0}
+  SelfMutilation_p: {fileID: 0}
 --- !u!1001 &4840614185835801582
 PrefabInstance:
   m_ObjectHideFlags: 0

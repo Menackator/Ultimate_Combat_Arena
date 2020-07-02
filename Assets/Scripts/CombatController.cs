@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Linq;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour
@@ -23,6 +25,13 @@ public class CombatController : MonoBehaviour
     public bool[] charUsed = new bool[4]; // Denotes which characters are being used: 0 = SH, 1 = TK, 2 = RL, 3 = AV
     public GameObject[] playerObjOrder = new GameObject[4]; // Used to store gameobject references
     public GameObject[] playerCamOrder = new GameObject[4]; // Used to store gameobject references
+    public List<List<int>> decks = new List<List<int>>(); // List of four possible card decks (list of lists)
+
+    // FIND A WAY TO NOT USE THESE ANYMORE:
+    public SH_Control SH_Control;
+    public TK_Control TK_Control;
+    public RL_Control RL_Control;
+    public AV_Control AV_Control;
 
     // Start is called before the first frame update
     void Awake()
@@ -31,8 +40,13 @@ public class CombatController : MonoBehaviour
         numOfPlayers = 2;
         playerOrder[0] = 0;
         playerOrder[1] = 1;
+        IEnumerable<int> numbers = Enumerable.Range(0, 30);
+        List<int> numbersList = numbers.ToList();
+        decks.Add(numbersList);
+        decks.Add(numbersList);
+        Debug.Log(numbersList);
 
-        // Finds each character
+        // Finds each character ------------------------- CURRENTLY ONLY WORKS IF PLAYERS CHOOSE ONLY ONE OF EACH CHARACTER
         SH = GameObject.Find("Senka Hekt");
         TK = GameObject.Find("Tatakai");
         RL = GameObject.Find("Rama Lux");
@@ -54,21 +68,25 @@ public class CombatController : MonoBehaviour
                 case 0: // Senka Hekt
                     playerObjOrder[i] = SH;
                     playerCamOrder[i] = SH_Cam;
+                    SH_Control = SH.GetComponent<SH_Control>();
                     charUsed[0] = true;
                     break;
                 case 1: // Tatakai
                     playerObjOrder[i] = TK;
                     playerCamOrder[i] = TK_Cam;
+                    TK_Control = TK.GetComponent<TK_Control>();
                     charUsed[1] = true;
                     break;
                 case 2: // Rama Lux
                     playerObjOrder[i] = RL;
                     playerCamOrder[i] = RL_Cam;
+                    RL_Control = RL.GetComponent<RL_Control>();
                     charUsed[2] = true;
                     break;
                 case 3: // Ansell V'Han
                     playerObjOrder[i] = AV;
                     playerCamOrder[i] = AV_Cam;
+                    AV_Control = AV.GetComponent<AV_Control>();
                     charUsed[3] = true;
                     break;
             }
@@ -110,6 +128,28 @@ public class CombatController : MonoBehaviour
         playerName = playerObjOrder[0].name;
         playerNum = 0;
         targetNum = 1;
+        for (int i = 0; i < decks.Count; i++) // <-- This for loop works for more than two players
+        {
+            playerObjOrder[i].GetComponent<CharacterInfo>().deckOriginal = decks[i];
+        }
+
+        if (SH.activeSelf == true)
+        {
+            SH_Control.InitializeDecks();
+        }
+        if (TK.activeSelf == true)
+        {
+            TK_Control.InitializeDecks();
+        }
+        if (RL.activeSelf == true)
+        {
+            RL_Control.InitializeDecks();
+        }
+        if (AV.activeSelf == true)
+        {
+            AV_Control.InitializeDecks();
+        }
+
     }
     
 
@@ -159,7 +199,9 @@ public class CombatController : MonoBehaviour
     // Method ends the turn (round) and starts the next one
     public void EndTurnAndStartNewOne()
     {
-
+        // For each player:
+        //handChosen = false;
+        //currentHand.Clear();
     }
 
     // Update is called once per frame

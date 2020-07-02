@@ -13,15 +13,16 @@ public class SH_Control : MonoBehaviour
     public GameObject DeckButton;
     public GameObject ActionButton;
     public GameObject EndTurnButton;
-    private GameObject SH_Cards;
-    private GameObject Controller;
     private GameObject Card1;
     private GameObject Card2;
     private GameObject Card3;
     private GameObject Card4;
     private GameObject Card5;
-    public Camera Camera;
     private GameObject CameraObj;
+    public Camera Camera;
+    private SH_Cards SH_Cards;
+    private CharacterInfo CharacterInfo;
+    private CombatController Controller;
     public string opponentName;
     public int opponentHealth;
     private bool cardsDrawn;
@@ -44,8 +45,15 @@ public class SH_Control : MonoBehaviour
         EndTurnButton = GameObject.Find("Senka Hekt/Camera/P_UI/EndTurn");
 
         // Relevant Objects
-        SH_Cards = GameObject.Find("Card Database");
-        Controller = GameObject.Find("CombatController");
+        SH_Cards = GetComponent<SH_Cards>();
+        CharacterInfo = GetComponent<CharacterInfo>();
+        Controller = GameObject.Find("CombatController").GetComponent<CombatController>();
+
+    }
+
+    // Method used to initialize the decks that the player chose for this character
+    public void InitializeDecks()
+    {
 
     }
 
@@ -103,11 +111,12 @@ public class SH_Control : MonoBehaviour
             Vector3 cameraPosition = Camera.transform.position;
             Quaternion cameraOrientation = Camera.transform.rotation;
 
-            Card1 = Instantiate(SH_Cards.GetComponent<SH_Cards>().GatherDarkness_b, new Vector3(-2, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card2 = Instantiate(SH_Cards.GetComponent<SH_Cards>().Scratch_b, new Vector3(-1, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card3 = Instantiate(SH_Cards.GetComponent<SH_Cards>().BarbedWhip_b, cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card4 = Instantiate(SH_Cards.GetComponent<SH_Cards>().BloodMagic_b, new Vector3(1, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
-            Card5 = Instantiate(SH_Cards.GetComponent<SH_Cards>().Desperation_b, new Vector3(2, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
+            Debug.Log(SH_Cards.SH_CardChoices[0].name);
+            Card1 = Instantiate(SH_Cards.SH_CardChoices[0], new Vector3(-2, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
+            Card2 = Instantiate(SH_Cards.SH_CardChoices[1], new Vector3(-1, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
+            Card3 = Instantiate(SH_Cards.SH_CardChoices[2], cameraDirection * 2 + cameraPosition, cameraOrientation);
+            Card4 = Instantiate(SH_Cards.SH_CardChoices[3], new Vector3(1, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
+            Card5 = Instantiate(SH_Cards.SH_CardChoices[4], new Vector3(2, 0, 0) + cameraDirection * 2 + cameraPosition, cameraOrientation);
             cardsDrawn = true;
         }
         else if (state == false)
@@ -124,7 +133,7 @@ public class SH_Control : MonoBehaviour
     // Time delay coroutine
     IEnumerator WaitFunction(float time, bool endTurn)
     {
-        GetComponent<CharacterInfo>().cardPlayed = true;
+        CharacterInfo.cardPlayed = true;
         yield return new WaitForSeconds(time);
         if (cardsDrawn == true)
         {
@@ -135,11 +144,11 @@ public class SH_Control : MonoBehaviour
 
         if (endTurn == false)
         {
-            Controller.GetComponent<CombatController>().SwitchPlayer();
+            Controller.SwitchPlayer();
         }
         else
         {
-            Controller.GetComponent<CombatController>().EndTurnAndStartNewOne();
+            Controller.EndTurnAndStartNewOne();
         }
     }
 
@@ -158,15 +167,15 @@ public class SH_Control : MonoBehaviour
         if (CameraObj.activeSelf == true)
         {
             // GUI Update
-            opponentName = Controller.GetComponent<CombatController>().targetName;
-            int targetNum = Controller.GetComponent<CombatController>().targetNum;
-            opponentHealth = Controller.GetComponent<CombatController>().playerObjOrder[targetNum].GetComponent<CharacterInfo>().health;
+            opponentName = Controller.targetName;
+            int targetNum = Controller.targetNum;
+            opponentHealth = Controller.playerObjOrder[targetNum].GetComponent<CharacterInfo>().health;
             OpponentLP_Text.text = opponentName + "'s Life Points: " + opponentHealth.ToString();
-            LP_Text.text = "Life Points: " + GetComponent<CharacterInfo>().health.ToString();
-            int playerNum = Controller.GetComponent<CombatController>().playerNum;
-            int playerHealthEffect = Controller.GetComponent<CombatController>().EndOfTurn_HealthEffect[playerNum];
-            int targetHealthEffect = Controller.GetComponent<CombatController>().EndOfTurn_HealthEffect[targetNum];
-            int miscHealthEffect = Controller.GetComponent<CombatController>().EndOfTurn_MiscEffect;
+            LP_Text.text = "Life Points: " + CharacterInfo.health.ToString();
+            int playerNum = Controller.playerNum;
+            int playerHealthEffect = Controller.EndOfTurn_HealthEffect[playerNum];
+            int targetHealthEffect = Controller.EndOfTurn_HealthEffect[targetNum];
+            int miscHealthEffect = Controller.EndOfTurn_MiscEffect;
             EndOfTurnEffects_Text.text = "End of Turn Effects\n" + "You: " + playerHealthEffect + "\nOpponent: " + targetHealthEffect + "\nEither: " + miscHealthEffect;
 
             // Checks if player clicks a card uses a raycast
@@ -176,7 +185,7 @@ public class SH_Control : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
 
-                if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Card") && GetComponent<CharacterInfo>().cardPlayed == false)
+                if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Card") && CharacterInfo.cardPlayed == false)
                 {
                     hit.collider.gameObject.SendMessage("DoAction");
                     StartCoroutine(WaitFunction(1.0f, false));

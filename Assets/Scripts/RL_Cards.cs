@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class RL_Cards : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject[] RL_CardChoices = new GameObject[30];
 
-    // Update is called once per frame
-    void Update()
+    // Awake is called before start functions
+    void Awake()
     {
-        
+        RL_CardChoices = Resources.LoadAll<GameObject>("Prefabs/Rama Lux Card Deck") as GameObject[];
     }
 }

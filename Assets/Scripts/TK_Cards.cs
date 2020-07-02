@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TK_Cards : MonoBehaviour
 {
-    public GameObject Bargain_b;
+    /*public GameObject Bargain_b;
     public GameObject BuyTime_b;
     public GameObject CutAndRun_b;
     public GameObject DefensiveStrike_b;
@@ -32,16 +32,18 @@ public class TK_Cards : MonoBehaviour
     public GameObject SetFires_y;
     public GameObject SmokeScreen_y;
     public GameObject Assasinate_p;
-    public GameObject Decoy_p;
+    public GameObject Decoy_p;*/
+    public GameObject[] TK_CardChoices = new GameObject[30];
 
     // Awake is called before start functions
     void Awake()
     {
-        Bargain_b = Resources.Load("Prefabs/Tatakai Card Deck/Bargain_b") as GameObject;
+        /*Bargain_b = Resources.Load("Prefabs/Tatakai Card Deck/Bargain_b") as GameObject;
         BuyTime_b = Resources.Load("Prefabs/Tatakai Card Deck/BuyTime_b") as GameObject;
         TK_Kick_b = Resources.Load("Prefabs/Tatakai Card Deck/TK_Kick_b") as GameObject;
         Slice_b = Resources.Load("Prefabs/Tatakai Card Deck/Slice_b") as GameObject;
-        Stab_b = Resources.Load("Prefabs/Tatakai Card Deck/Stab_b") as GameObject;
+        Stab_b = Resources.Load("Prefabs/Tatakai Card Deck/Stab_b") as GameObject;*/
+        TK_CardChoices = Resources.LoadAll<GameObject>("Prefabs/Tatakai Card Deck") as GameObject[];
     }
 
 }
